@@ -1,27 +1,20 @@
-package com.reliaquest.api.controller;
+package com.reliaquest.api.service;
 
 import com.reliaquest.api.dto.CreateEmployeeRequest;
 import com.reliaquest.api.dto.Employee;
-import com.reliaquest.api.service.EmployeeService;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/v1/employee")
-@AllArgsConstructor
-@Slf4j
-public class EmployeeController implements IEmployeeController<Employee, CreateEmployeeRequest> {
-
-    private final EmployeeService employeeService;
+@Profile("default")
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public ResponseEntity<List<Employee>> getAllEmployees() {
-        return employeeService.getAllEmployees();
+        return null;
     }
 
     @Override
