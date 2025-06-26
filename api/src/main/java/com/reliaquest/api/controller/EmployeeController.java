@@ -3,6 +3,7 @@ package com.reliaquest.api.controller;
 import com.reliaquest.api.dto.CreateEmployeeRequest;
 import com.reliaquest.api.dto.Employee;
 import com.reliaquest.api.service.EmployeeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +51,7 @@ public class EmployeeController implements IEmployeeController<Employee, CreateE
 
     @Override
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(CreateEmployeeRequest createRequest) {
+    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeRequest createRequest) {
         return ResponseEntity.ok(employeeService.createEmployee(createRequest));
     }
 
