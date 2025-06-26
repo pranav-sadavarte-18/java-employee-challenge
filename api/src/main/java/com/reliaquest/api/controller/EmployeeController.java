@@ -3,54 +3,60 @@ package com.reliaquest.api.controller;
 import com.reliaquest.api.dto.CreateEmployeeRequest;
 import com.reliaquest.api.dto.Employee;
 import com.reliaquest.api.service.EmployeeService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employee")
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class EmployeeController implements IEmployeeController<Employee, CreateEmployeeRequest> {
 
     private final EmployeeService employeeService;
 
     @Override
+    @GetMapping
     public ResponseEntity<List<Employee>> getAllEmployees() {
-        return employeeService.getAllEmployees();
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @Override
-    public ResponseEntity<List<Employee>> getEmployeesByNameSearch(String searchString) {
-        return null;
+    @GetMapping("/search/{searchString}")
+    public ResponseEntity<List<Employee>> getEmployeesByNameSearch(@PathVariable String searchString) {
+        return ResponseEntity.ok(employeeService.getEmployeesByNameSearch(searchString));
     }
 
     @Override
-    public ResponseEntity<Employee> getEmployeeById(String id) {
-        return null;
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable String id) {
+        return ResponseEntity.ok(employeeService.getEmployeeById(id));
     }
 
     @Override
+    @GetMapping("/highestSalary")
     public ResponseEntity<Integer> getHighestSalaryOfEmployees() {
-        return null;
+        return ResponseEntity.ok(employeeService.getHighestSalaryOfEmployees());
     }
 
     @Override
+    @GetMapping("/topTenHighestEarningEmployeeNames")
     public ResponseEntity<List<String>> getTopTenHighestEarningEmployeeNames() {
-        return null;
+        return ResponseEntity.ok(employeeService.getTopTenHighestEarningEmployeeNames());
     }
 
     @Override
-    public ResponseEntity<Employee> createEmployee(CreateEmployeeRequest employeeInput) {
-        return null;
+    @PostMapping
+    public ResponseEntity<Employee> createEmployee(CreateEmployeeRequest createRequest) {
+        return ResponseEntity.ok(employeeService.createEmployee(createRequest));
     }
 
     @Override
-    public ResponseEntity<String> deleteEmployeeById(String id) {
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteEmployeeById(@PathVariable String id) {
+        return ResponseEntity.ok(employeeService.deleteEmployeeById(id));
     }
 }
