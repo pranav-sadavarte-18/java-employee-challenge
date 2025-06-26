@@ -26,7 +26,7 @@ public class EmployeeClient {
     private final RestTemplate restTemplate;
 
     @Value("${employee.client.base.url}")
-    private final String BASE_URL;
+    private String BASE_URL;
 
     public List<Employee> fetchAllEmployees() {
         ResponseEntity<Response<List<Employee>>> responseEntity = restTemplate.exchange(
@@ -44,7 +44,7 @@ public class EmployeeClient {
                 BASE_URL + "/" + UUID.fromString(id),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<>() {
+                new ParameterizedTypeReference<Response<Employee>>() {
                 }
         );
 
