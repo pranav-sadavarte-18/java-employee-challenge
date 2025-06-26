@@ -116,12 +116,13 @@ class EmployeeControllerTest {
               "age": 10
             }
         """;
+        when(employeeService.createEmployee(any())).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST, "BAD REQUEST"));
 
         mockMvc.perform(post("/api/v1/employee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidJson))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error").value("BAD REQUEST"));
+                .andExpect(jsonPath("$.message").value("BAD REQUEST"));
     }
 
     @Test
@@ -136,10 +137,10 @@ class EmployeeControllerTest {
     @Test
     void testDeleteEmployeeById_InternalError() throws Exception {
         when(employeeService.deleteEmployeeById("123"))
-                .thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Error"));
+                .thenThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error"));
 
         mockMvc.perform(delete("/api/v1/employee/123"))
                 .andExpect(status().isInternalServerError())
-                .andExpect(jsonPath("$.error").value("Internal Server Error"));
+                .andExpect(jsonPath("$.message").value("Internal Server Error"));
     }
 }

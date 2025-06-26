@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
 
 @Data
 @AllArgsConstructor
@@ -19,10 +18,8 @@ public class CreateEmployeeRequest {
 
     @Min(16)
     @Max(75)
-    @NonNull
     private Integer age;
 
-    @NonNull
     @Positive
     private Integer salary;
 
