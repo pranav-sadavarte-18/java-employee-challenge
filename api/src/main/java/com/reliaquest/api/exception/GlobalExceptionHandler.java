@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
                 .findFirst()
                 .orElse("Validation error");
 
-        return ResponseEntity.badRequest().body(new ErrorResponse(errorMessage, "BAD REQUEST"));
+        return ResponseEntity.badRequest().body(new ErrorResponse(errorMessage, "Bad Request"));
     }
 
     @ExceptionHandler(HttpClientErrorException.TooManyRequests.class)
@@ -54,8 +54,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpClientErrorException.NotFound.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(HttpClientErrorException.NotFound ex) {
-        ErrorResponse errorResponse = parseErrorResponse(ex.getResponseBodyAsString(),
-                "Not Found");
+        ErrorResponse errorResponse = parseErrorResponse("Not Found",
+                "Resource Not Found");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 

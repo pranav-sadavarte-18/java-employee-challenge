@@ -103,7 +103,7 @@ class EmployeeControllerTest {
         mockMvc.perform(post("/api/v1/employee")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.employee_name").value("Alice"));
     }
 

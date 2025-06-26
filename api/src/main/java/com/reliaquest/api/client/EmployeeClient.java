@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -52,14 +54,24 @@ public class EmployeeClient {
     }
 
     public Employee createEmployee(CreateEmployeeRequest createRequest) {
-        HttpEntity<CreateEmployeeRequest> request = new HttpEntity<>(createRequest);
-        ResponseEntity<Response<Employee>> response = restTemplate.exchange(
-                BASE_URL,
-                HttpMethod.POST,
-                request,
-                new ParameterizedTypeReference<>() {}
-        );
-        return processResponse(response);
+        try {
+            HttpEntity<CreateEmployeeRequest> request = new HttpEntity<>(createRequest);
+            ResponseEntity<Response<Employee>> response = restTemplate.exchange(
+                    BASE_URL,
+                    HttpMethod.POST,
+                    request,
+                    new ParameterizedTypeReference<>() {
+                    }
+            );
+            return processResponse(response);
+        } catch (HttpServerErrorException.InternalServerError ex) {
+            String responseBody = ex.getResponseBodyAsString();
+            if (responseBody.contains("Validation failed")) {
+                throw new HttpClientErrorException(HttpStatus.BAD_REQUEST);
+            } else {
+                throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 
     public boolean deleteEmployee(DeleteEmployeeRequest deleteRequest) {

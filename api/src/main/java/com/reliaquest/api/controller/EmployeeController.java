@@ -3,19 +3,17 @@ package com.reliaquest.api.controller;
 import com.reliaquest.api.dto.CreateEmployeeRequest;
 import com.reliaquest.api.dto.Employee;
 import com.reliaquest.api.service.EmployeeService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/employee")
 @RequiredArgsConstructor
-@Validated
 @Slf4j
 public class EmployeeController implements IEmployeeController<Employee, CreateEmployeeRequest> {
 
@@ -53,8 +51,10 @@ public class EmployeeController implements IEmployeeController<Employee, CreateE
 
     @Override
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody CreateEmployeeRequest createRequest) {
-        return ResponseEntity.ok(employeeService.createEmployee(createRequest));
+    public ResponseEntity<Employee> createEmployee(@RequestBody CreateEmployeeRequest createRequest) {
+        Employee newEmployee = employeeService.createEmployee(createRequest);
+        URI location = URI.create("/api/v1/employee/" + newEmployee.getId());
+        return ResponseEntity.created(location).body(newEmployee);
     }
 
     @Override
